@@ -24,5 +24,7 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
-  }
+  },
+  outDir: '../public',
+  base: '/tab-zhan/',
 })
