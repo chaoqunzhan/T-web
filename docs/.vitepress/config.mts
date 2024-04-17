@@ -2,21 +2,45 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Tab Zhan",
-  description: "A VitePress Site",
+  title: "前端T站",
+  description: "一个前端coder的个人博客",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: '工作', link: '/work/browser/浏览器跨标签页通信的方式' },
+      { text: '生活', link: '/life' },
+      { text: '其他', link: '/other/index' }
     ],
 
     sidebar: [
       {
-        text: 'Examples',
+        text: '工作杂谈',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { 
+            text: 'Browser', 
+            collapsed: true,
+            items: [
+              { text: '浏览器跨标签页通信的方式', link: '/work/browser/浏览器跨标签页通信的方式' },
+            ]
+          },
+          { text: 'JavaScript', link: '/work/js' },
+          { text: 'HTML', link: '/work/html' },
+          { text: 'CSS', link: '/work/css' },
+          { 
+            text: 'VUE', 
+            collapsed: true,
+              items: [
+                { text: 'vue3版无限滚动加载', link: '/work/vue/vue3版无限滚动加载' },
+              ]
+          },
+          { text: 'TypeScript', link: '/work/ts' },
+          { 
+            text: '应用', 
+            collapsed: true,
+              items: [
+                { text: '前端导入、导出EXCEL-SheetJs', link: '/work/use/前端导入、导出EXCEL-SheetJs' },
+              ]
+          }
         ]
       }
     ],

@@ -3,16 +3,17 @@
 layout: home
 
 hero:
-  name: "Tab Zhan"
-  text: "A VitePress Site"
-  tagline: My great project tagline
+  image: /tab-logo.png
+  name: "前端T站"
+  text: "一个前端coder的个人博客"
+  tagline: 
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 学习资源
+      link: /work/vue/vue2
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 生活日记
+      link: /life/index
 
 features:
   - title: Feature A
