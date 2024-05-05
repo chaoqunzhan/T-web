@@ -57,5 +57,5 @@ export default defineConfig({
     ]
   },
   outDir: '../public',
-  base: '/tab-zhan/',
+  base: '/T-web/',
 })
