@@ -40,6 +40,13 @@ export default defineConfig({
               items: [
                 { text: '前端导入、导出EXCEL-SheetJs', link: '/work/use/前端导入、导出EXCEL-SheetJs' },
               ]
+          },
+          {
+            text:'其他',
+            collapsed: true,
+            items: [
+              { text:'前端也来了解AI了', link: '/work/other/前端也来了解AI了' },
+            ]
           }
         ]
       }
