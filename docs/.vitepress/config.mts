@@ -56,6 +56,5 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
   },
-  outDir: '../public',
   base: '/T-web/',
 })
