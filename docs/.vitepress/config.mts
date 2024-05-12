@@ -23,7 +23,13 @@ export default defineConfig({
               { text: '浏览器跨标签页通信的方式', link: '/work/browser/浏览器跨标签页通信的方式' },
             ]
           },
-          { text: 'JavaScript', link: '/work/js' },
+          { 
+            text: 'JavaScript', 
+            collapsed: true,
+              items: [
+                { text: '如何学习JS框架', link: '/work/js/如何学习JS框架/index' },
+              ]
+          },
           { text: 'HTML', link: '/work/html' },
           { text: 'CSS', link: '/work/css' },
           { 
