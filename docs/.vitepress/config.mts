@@ -31,12 +31,19 @@ export default defineConfig({
               ]
           },
           { text: 'HTML', link: '/work/html' },
-          { text: 'CSS', link: '/work/css' },
+          { 
+            text: 'CSS', 
+            collapsed: true,
+              items: [
+                { text: 'flex布局怎么让最后一行元素靠左排列?', link: '/work/css/flex布局怎么让最后一行元素靠左排列/index' },
+              ]
+          },
           { 
             text: 'VUE', 
             collapsed: true,
               items: [
                 { text: 'vue3版无限滚动加载', link: '/work/vue/vue3版无限滚动加载' },
+                { text: 'vite-plugin-legacy解读', link: '/work/vue/vite-plugin-legacy解读/index' },
               ]
           },
           { text: 'TypeScript', link: '/work/ts' },
