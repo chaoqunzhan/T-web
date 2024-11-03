@@ -16,11 +16,11 @@ hero:
       link: /life/index
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 工作
+    details: 工作可指：就业，两个伙伴之间的契约关系。
+  - title: 生活
+    details: 生活，广义上讲是人类为活着而做出的一切行为。
+  - title: 其他
+    details: 其他：别的，其余，不分人与物。
 ---
 

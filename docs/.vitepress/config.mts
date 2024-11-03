@@ -28,6 +28,7 @@ export default defineConfig({
             collapsed: true,
               items: [
                 { text: '如何学习JS框架', link: '/work/js/如何学习JS框架/index' },
+                { text: '手写Object.groupBy', link: '/work/js/手写Object.groupBy/index' },
               ]
           },
           { text: 'HTML', link: '/work/html' },
