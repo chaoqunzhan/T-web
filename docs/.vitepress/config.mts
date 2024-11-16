@@ -31,12 +31,13 @@ export default defineConfig({
                 { text: '手写Object.groupBy', link: '/work/js/手写Object.groupBy/index' },
               ]
           },
-          { text: 'HTML', link: '/work/html' },
+          // { text: 'HTML', link: '/work/html' },
           { 
             text: 'CSS', 
             collapsed: true,
               items: [
                 { text: 'flex布局怎么让最后一行元素靠左排列?', link: '/work/css/flex布局怎么让最后一行元素靠左排列/index' },
+                { text: '保持元素宽高比', link: '/work/css/保持元素宽高比/index' },
               ]
           },
           { 
@@ -47,7 +48,7 @@ export default defineConfig({
                 { text: 'vite-plugin-legacy解读', link: '/work/vue/vite-plugin-legacy解读/index' },
               ]
           },
-          { text: 'TypeScript', link: '/work/ts' },
+          // { text: 'TypeScript', link: '/work/ts' },
           { 
             text: '应用', 
             collapsed: true,
