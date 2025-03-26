@@ -394,9 +394,110 @@ var rotate = function(nums, k) {
 >
 >输出: [24,12,8,6]
 #### 思路：
+1、左右乘积列表：
+- 一次循环维护L和R数组代表左右乘积
+- 再次循环获取ans[i]=L[i]*R[i]
 
+2、改进：用ans储存L和R降低空间复杂度（TODO）
+
+3、改进：用双指针一次遍历（TODO）
 #### 代码
 ```js
-
-
+var productExceptSelf = function(nums) {
+    let n = nums.length
+    let L = new Array(n)
+    let R = new Array(n)
+    L[0] = 1
+    R[n-1] = 1
+    for(let i=1; i<nums.length; i++){
+        L[i] = L[i-1] * nums[i-1]
+        R[n-i-1] = R[n-i] * nums[n-i]
+    }
+    const ans = []
+    for(let i=0; i<nums.length; i++){
+        ans.push(L[i]*R[i])
+    }
+    return ans
+};
 ```
+
+## 矩阵（4）
+### 73. 矩阵置零
+#### 题目
+> 输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
+> 
+> 输出：[[1,0,1],[0,0,0],[1,0,1]]
+#### 思路：
+- 遍历一遍，找出有0的行号和列号，用两个set保存
+- 再遍历一遍，遇到set中的行号和列号的元素置为0
+- 优化：使用第一行和第一列替代set减少空间复杂度
+#### 代码
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = function(matrix) {
+    const zeroI = new Set()
+    const zeroJ = new Set()
+    for(let i=0; i<matrix.length; i++){
+        const arr = matrix[i]
+        for(let j=0; j<arr.length; j++){
+            if(matrix[i][j]===0){
+                zeroI.add(i)
+                zeroJ.add(j)
+            }
+        }
+    }
+    for(let i=0; i<matrix.length; i++){
+        const arr = matrix[i]
+        for(let j=0; j<arr.length; j++){
+            if(zeroI.has(i) || zeroJ.has(j)){
+                matrix[i][j] = 0
+            }
+        }
+    }
+};
+```
+### 54. 螺旋矩阵
+#### 题目
+> 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+#### 思路：
+矩阵转置 + 翻转
+#### 代码
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var rotate = function(matrix) {
+    const n = matrix.length
+    //转置
+    for(let i=0; i<n; i++){
+        for(let j=i; j<n; j++){
+            //这里的j从i开始避免重复交换
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+        }
+    }
+    //交换
+    for(let i=0; i<n; i++){
+        //这里的j只到n/2避免重复交换
+        for(let j=0; j<n/2; j++){
+            [matrix[i][j], matrix[i][n-j-1]] = [matrix[i][n-j-1], matrix[i][j]]
+        }
+    }
+};
+```
+### 48. 旋转图像
+#### 题目
+
+#### 思路：
+
+#### 代码
+
+### 240. 搜索二维矩阵 II
+#### 题目
+
+#### 思路：
+
+#### 代码
