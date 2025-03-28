@@ -771,13 +771,122 @@ var addTwoNumbers = function(l1, l2) {
 #### 题目
 > 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
 #### 方法
+1、计算链表长度
+
+2、栈
+
+3、双指针
+
+#### 代码
+```js
+var removeNthFromEnd = function(head, n) {
+    let dumy = new ListNode()
+    dumy.next = head
+    let frist = dumy
+    let second = dumy
+    let i = 0
+    let j = 0 - n - 1
+    while(!!frist){
+        frist = frist.next
+        if(j>=0){
+            second = second.next
+        }
+        i++
+        j++
+    }
+    second.next = second.next.next
+    let resNode = dumy.next
+    dumy.next = null  //释放影子节点
+    return resNode
+};
+```
+
+### 24. 两两交换链表中的节点
+
+#### 题目
+> 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+
+> 输入：head = [1,2,3,4]
+> 
+> 输出：[2,1,4,3]
+#### 方法
+1、迭代
+- 新建dumyNode->head
+- 用tempNode表示当前位置，交换tempNode.next和tempNode.next.next
+- 交换完成tempNode指向tempNode.next.next
+
+2、递归
+- 新建dumyNode->head
+- 交换head和head.next
+- head->swapPairs(head.next)
+
+#### 代码
+```js
+/**
+ * 迭代
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function(head) {
+    if(!head || !head.next) return head
+    const dumyNode = new ListNode()
+    dumyNode.next = head
+    let tempNode = dumyNode
+    while(tempNode && tempNode.next && tempNode.next .next){
+        const nodeA = tempNode.next
+        const nodeB = nodeA.next
+        tempNode.next = nodeB
+        nodeA.next = nodeB.next 
+        nodeB.next = nodeA
+        //下一步
+        tempNode = tempNode.next.next
+    }
+    return dumyNode.next
+};
+
+/**
+ * 递归
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function(head) {
+    if(!head || !head.next) return head
+    const dumyNode = new ListNode()
+    dumyNode.next = head
+    let nodeA = head
+    let nodeB = nodeA.next
+    nodeA.next = swapPairs(nodeB.next)
+    dumyNode.next = nodeB
+    nodeB.next = nodeA
+    return dumyNode.next
+};
+```
+
+### 
+
+#### 题目
+> 
+#### 方法
 
 
 #### 代码
 ```js
-var addTwoNumbers = function(l1, l2) {
-    
-};
+
+
+```
+
+
+### 
+
+#### 题目
+> 
+#### 方法
+
+
+#### 代码
+```js
+
+
 ```
 
 ### 
