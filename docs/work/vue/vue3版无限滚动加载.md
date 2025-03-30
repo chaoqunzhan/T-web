@@ -1,3 +1,4 @@
+# vue3 无限滚动
 ## 零、为何造轮子
 
 最近项目由`vue2`切换成`vue3`，因为某种原因UI框架选择的是`ant design 2.0`,`ant design 2.0`虽然升级了1.0的大部分组件，但是`list`组件只有手动触发的`loadmore`。业务上的需要，我们必须使用用户体验更好的无限滚动加载。通过`ant design 1.0`文档，可以看到官方推荐的方法是`vue-infinite-scroll`这个现在已经不在维护的插件，`vue-infinite-scroll`确实是个好插件，但就是不支持`vue3`。

@@ -1217,7 +1217,7 @@ var inorderTraversal = function(root) {
 
 ```
 
-### 104. 二叉树的最大深度
+### 104. 二叉树的最大深度（简单）
 
 #### 题目
 > 给定一个二叉树 root ，返回其最大深度。
@@ -1286,7 +1286,7 @@ var invertTree = function(root) {
 };
 ```
 
-### 101. 对称二叉树
+### 101. 对称二叉树（简单）
 #### 题目
 > 给你一个二叉树的根节点 root ， 检查它是否轴对称。
 #### 方法
@@ -1325,23 +1325,66 @@ var isSymmetric = function(root) {
 
 ```
 
-### 543.二叉树的直径
+### 543.二叉树的直径（简单）
 #### 题目
 > 给你一棵二叉树的根节点，返回该树的 直径 。
 #### 方法
-
-#### 代码
-```js
-
-```
-### 
-#### 题目
+> 二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。
 > 
-#### 方法
+> 两节点之间路径的 长度 由它们之间边数表示。
 
+- 深度优先遍历
+- maxDepth记录遍历过的节点的最大深度
+- dfs返回遍历的节点的单边深度（比较长的子树：左子树或右子树）
 #### 代码
 ```js
-
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var diameterOfBinaryTree = function(root) {
+    let maxDepth = 0
+    let dfs = function(node){
+        if(!node) return 0
+        let leftDepth = dfs(node.left)
+        let rightDepth = dfs(node.right)
+        maxDepth = Math.max(maxDepth, leftDepth+rightDepth)
+        return Math.max(leftDepth, rightDepth) + 1
+    }
+    dfs(root)
+    return maxDepth
+};
+```
+### 102. 二叉树的层序遍历（中等）
+#### 题目
+> 给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。
+#### 方法
+层序遍历
+- 逐层把数据保存下来
+- levelSize = queue.length不能直接queue.length
+#### 代码
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    if(!root) return []
+    const ans = []
+    const queue = [root]
+    while(queue.length>0){
+        const arr = []
+        const levelSize = queue.length;
+        for(let i=0; i<levelSize; i++){
+            const node = queue.shift()
+            arr.push(node.val)
+            if(node.left) queue.push(node.left)
+            if(node.right) queue.push(node.right)
+        }
+        ans.push(arr)
+    }
+    return ans
+};
 ```
 ### 
 #### 题目
