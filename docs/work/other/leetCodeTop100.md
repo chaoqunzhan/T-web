@@ -861,8 +861,22 @@ var swapPairs = function(head) {
     return dumyNode.next
 };
 ```
+### 25. K个一组的翻转链表
 
-### 
+#### 题目
+> 给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
+
+#### 方法
+1、迭代
+
+2、递归
+
+#### 代码
+```js
+//TODO
+```
+
+### 138. 随机链表的复制
 
 #### 题目
 > 
@@ -876,7 +890,133 @@ var swapPairs = function(head) {
 ```
 
 
-### 
+### 148.排序链表
+
+#### 题目
+> 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+
+> 进阶：你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？
+#### 方法
+1、自顶向下归并排序
+- 对链表自顶向下归并排序的过程如下。
+- 找到链表的中点，以中点为分界，将链表拆分成两个子链表。寻找链表的中点可以使用快慢指针的做法。
+- 对两个子链表分别排序。
+- 将两个排序后的子链表合并，得到完整的排序后的链表。
+
+
+2、自底向上归并排序
+- 使用自底向上的方法实现归并排序，则可以达到 O(1) 的空间复杂度。
+
+#### 代码
+```js
+// 1、自顶向下归并排序
+var sortList = function(head) {
+    //退出递归条件
+    if(!head || !head.next){
+        return head
+    }
+
+    //快慢指针寻找中间节点
+    const dumyHead = new ListNode(0)
+    dumyHead.next = head
+    let slowNode = dumyHead
+    let fastNode = head
+    while(fastNode && fastNode.next){
+        slowNode = slowNode.next
+        fastNode = fastNode.next.next
+    }
+    const midNode = slowNode.next //找到中间位置节点
+    slowNode.next = null //记得断开链表！！！
+
+    let nodeA = sortList(head)
+    let nodeB = sortList(midNode)
+
+    //合并两个有序链表
+    let dumyNode = new ListNode(0)
+    let currNode = dumyNode
+    while(nodeA && nodeB){
+        if(nodeA.val>nodeB.val){
+            currNode.next = nodeB
+            nodeB = nodeB.next
+        }else{
+            currNode.next = nodeA
+            nodeA = nodeA.next
+        }
+        currNode = currNode.next
+    }
+    if(nodeA) currNode.next = nodeA
+    if(nodeB) currNode.next = nodeB
+    return dumyNode.next
+};
+
+//1、自底向上归并排序
+const merge = (head1, head2) => {
+    const dummyHead = new ListNode(0);
+    let temp = dummyHead, temp1 = head1, temp2 = head2;
+    while (temp1 !== null && temp2 !== null) {
+        if (temp1.val <= temp2.val) {
+            temp.next = temp1;
+            temp1 = temp1.next;
+        } else {
+            temp.next = temp2;
+            temp2 = temp2.next;
+        }
+        temp = temp.next;
+    }
+    if (temp1 !== null) {
+        temp.next = temp1;
+    } else if (temp2 !== null) {
+        temp.next = temp2;
+    }
+    return dummyHead.next;
+}
+
+var sortList = function(head) {
+    if (head === null) {
+        return head;
+    }
+
+    //计算长度
+    let length = 0;
+    let node = head;
+    while (node !== null) {
+        length++;
+        node = node.next;
+    }
+    const dummyHead = new ListNode(0, head);
+    //subLength <<= 1：左移，1，2，4，8
+    for (let subLength = 1; subLength < length; subLength <<= 1) {
+        let prev = dummyHead, curr = dummyHead.next;
+        while (curr !== null) {
+            let head1 = curr;
+            for (let i = 1; i < subLength && curr.next !== null; i++) {
+                curr = curr.next;
+            }
+            let head2 = curr.next;
+            curr.next = null;
+            curr = head2;
+            for (let i = 1; i < subLength && curr != null && curr.next !== null; i++) {
+                curr = curr.next;
+            }
+            let next = null;
+            if (curr !== null) {
+                next = curr.next;
+                curr.next = null;
+            }
+            const merged = merge(head1, head2);
+            prev.next = merged;
+            while (prev.next !== null) {
+                prev = prev.next;
+            }
+            curr = next;
+        }
+    }
+    return dummyHead.next;
+};
+
+```
+
+### 23. 合并K个生序链表
 
 #### 题目
 > 
@@ -889,15 +1029,367 @@ var swapPairs = function(head) {
 
 ```
 
-### 
+### 146. LRU缓存
 
 #### 题目
-> 
+> 如题
 #### 方法
+1、哈希Map
+- 利用js保存插入顺序的特性
 
+2、哈希 + 双向链表
+- 使用一个哈希表（Map）来存储键值对，以便快速查找。
+- 使用一个双向链表（Doubly Linked List）来维护数据的访问顺序，最近访问的节点放在链表头部，最久未访问的节点放在链表尾部
+#### 代码
+```js
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function(capacity) {
+    this.cache = new Map(); // 使用Map保持插入顺序
+    this.maxSize = capacity; // 缓存的最大容量
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+    if (!this.cache.has(key)) {
+        return -1 
+    }
+    const value = this.cache.get(key);
+    // 更新key为最新访问
+    this.cache.delete(key);
+    this.cache.set(key, value);
+    return value;
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+    if (this.cache.has(key)) {
+        // 如果键已存在，先删除旧的
+        this.cache.delete(key);
+    } else if (this.cache.size >= this.maxSize) {
+        // 如果超过最大容量，移除最早使用的元素
+        const firstKey = this.cache.keys().next().value;
+        this.cache.delete(firstKey);
+    }
+    // 添加新值或更新已有键的值，并将其标记为最新访问
+    this.cache.set(key, value);
+};
+
+
+
+
+//2、哈希 + 双向链表
+class LRUCache {
+    constructor(capacity) {
+        this.capacity = capacity; // 缓存容量
+        this.map = new Map(); // 哈希表存储键值对
+        this.head = new ListNode(); // 虚拟头节点
+        this.tail = new ListNode(); // 虚拟尾节点
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+
+    // 获取值
+    get(key) {
+        if (!this.map.has(key)) return -1;
+
+        const node = this.map.get(key);
+        this.moveToHead(node); // 将节点移到链表头部
+        return node.value;
+    }
+
+    // 插入或更新值
+    put(key, value) {
+        if (this.map.has(key)) {
+            const node = this.map.get(key);
+            node.value = value; // 更新值
+            this.moveToHead(node); // 将节点移到链表头部
+        } else {
+            const newNode = new ListNode(key, value); // 创建新节点
+            this.map.set(key, newNode); // 添加到哈希表
+            this.addToHead(newNode); // 将新节点添加到链表头部
+
+            if (this.map.size > this.capacity) {
+                const tailNode = this.removeTail(); // 移除链表尾部节点
+                this.map.delete(tailNode.key); // 从哈希表中删除对应键
+            }
+        }
+    }
+
+    // 将节点移到链表头部
+    moveToHead(node) {
+        this.removeNode(node); // 先移除节点
+        this.addToHead(node); // 再添加到头部
+    }
+
+    // 添加节点到链表头部
+    addToHead(node) {
+        node.prev = this.head;
+        node.next = this.head.next;
+        this.head.next.prev = node;
+        this.head.next = node;
+    }
+
+    // 移除节点
+    removeNode(node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    // 移除链表尾部节点
+    removeTail() {
+        const tailNode = this.tail.prev;
+        this.removeNode(tailNode);
+        return tailNode;
+    }
+}
+
+// 定义链表节点类
+class ListNode {
+    constructor(key = null, value = null) {
+        this.key = key;
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+```
+
+## 二叉树（15）
+### 94. 二叉树的中序遍历（简单）
+
+#### 题目
+> 给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。
+#### 方法
+1、递归
+
+2、迭代
+
+注：递归的时候隐式地维护了一个栈，在迭代的时候需要显式地将这个栈模拟出来
+#### 代码
+```js
+/**
+ * 递归
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var inorderTraversal = function(root) {
+    if(root==null) return []
+    var res = []
+    var inorder = function(node){
+        if(!node) return
+        inorder(node.left)
+        res.push(node.val)
+        inorder(node.right)
+    }
+    inorder(root)
+    return res
+};
+
+/**
+ * 迭代
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var inorderTraversal = function(root) {
+    const res = [];
+    const stk = [];
+    while (root || stk.length) {
+        while (root) {
+            stk.push(root);
+            root = root.left;
+        }
+        root = stk.pop();
+        res.push(root.val);
+        root = root.right;
+    }
+    return res;
+};
+
+```
+
+### 104. 二叉树的最大深度
+
+#### 题目
+> 给定一个二叉树 root ，返回其最大深度。
+#### 方法
+1、深度优先搜索
+- 递归
+
+2、广度优先搜索
+- 迭代
+- 维护一个队列，存每层的节点，一层处理完深度加1
+#### 代码
+```js
+/**
+ * 深度优先搜索，递归
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    if(!root) return 0
+    return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1
+};
+
+/**
+ * 广度优先搜索，迭代
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    if (!root) return 0; // 如果树为空，深度为 0
+    const queue = [root]; // 初始化队列，将根节点加入队列
+    let depth = 0; // 初始化深度
+    while (queue.length > 0) {
+        depth++; // 每处理一层，深度加 1
+        const levelSize = queue.length; // 当前层的节点数
+        for (let i = 0; i < levelSize; i++) {
+            const node = queue.shift(); // 取出队列中的第一个节点
+            // 将左右子节点加入队列（如果存在）
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
+        }
+    }
+    return depth; // 返回最大深度
+};
+
+```
+### 226. 翻转二叉树（简单）
+#### 题目
+> 给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
+#### 方法
+递归
+#### 代码
+```js
+/**
+ * 递归
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    if(!root){
+        return root
+    }
+    [root.left, root.right] = [root.right, root.left]
+    invertTree(root.left)
+    invertTree(root.right)
+    return root
+};
+```
+
+### 101. 对称二叉树
+#### 题目
+> 给你一个二叉树的根节点 root ， 检查它是否轴对称。
+#### 方法
+问题转化为左右两棵树
+- 它们的两个根结点具有相同的值
+- 每个树的右子树都与另一个树的左子树镜像对称
+
+1、递归
+
+2、迭代
+
+#### 代码
+```js
+/** 
+ * 递归
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function(root) {
+    if(!root) return true
+    let left = root.left
+    let right = root.right
+    var check = function(p, q){
+        if (!p && !q) return true;
+        if (!p || !q) return false;
+        return p.val === q.val && check(p.left, q.right) && check(q.left, p.right)
+    }
+    return check(left, right)
+};
+
+/** 
+ * 迭代 TODO
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+
+```
+
+### 543.二叉树的直径
+#### 题目
+> 给你一棵二叉树的根节点，返回该树的 直径 。
+#### 方法
 
 #### 代码
 ```js
 
+```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
 
 ```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
+
+```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
+
+```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
+
+```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
+
+```
+### 
+#### 题目
+> 
+#### 方法
+
+#### 代码
+```js
+
+```
+## 图论（4）
+
+## 图论（8）
+
+## 二分查找（6）
