@@ -1386,53 +1386,336 @@ var levelOrder = function(root) {
     return ans
 };
 ```
-### 
+### 108. 将有序数组转换为二叉搜索树
 #### 题目
+> 给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 平衡 二叉搜索树。
+
+> 二叉搜索树：
+- 左子树的所有节点的值小于该节点的值。
+- 右子树的所有节点的值大于该节点的值。
+- 左子树和右子树也必须分别是二叉搜索树。
+#### 方法
+中序遍历
+#### 代码
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/*+*
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+var sortedArrayToBST = function(nums) {
+    let root = null
+    let BST = function(start, end){
+        if(start > end) return
+        let mid = Math.floor((start + end) / 2)
+        let left = BST(start, mid - 1)
+        let right = BST(mid + 1, end)
+        let node = new TreeNode(nums[mid], left, right)
+        return node
+    }
+    root = BST(0, nums.length-1)
+    return root
+};
+```
+### 98. 验证二叉搜索树（中等）
+#### 题目
+> 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
 > 
+> 有效 二叉搜索树定义如下：
+- 节点的左子树只包含 小于 当前节点的数。
+- 节点的右子树只包含 大于 当前节点的数。
+- 所有左子树和右子树自身必须也是二叉搜索树。
+#### 方法
+中序遍历为升序
+#### 代码
+```js
+var isValidBST = function(root) {
+    let prev = null; // 记录中序遍历中的前一个节点值
+    // 定义递归函数
+    const inOrderTraversal = (node) => {
+        if (!node) return true; // 空节点始终满足 BST 条件
+        // 检查左子树
+        if (!inOrderTraversal(node.left)) return false;
+        // 检查当前节点是否满足 BST 条件
+        if (prev !== null && node.val <= prev) return false;
+        prev = node.val; // 更新前一个节点值
+        // 检查右子树
+        return inOrderTraversal(node.right);
+    };
+    // 从根节点开始递归
+    return inOrderTraversal(root);
+};
+```
+### 230. 二叉搜索树中第K小的元素（中等）
+#### 题目
+> 给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 小的元素（从 1 开始计数）。
+#### 方法
+用个标记index记录一下，中序遍历到index=k
+#### 代码
+```js
+var kthSmallest = function(root, k) {
+    let res = NaN
+    let index = 0
+    let kth = function(node){
+        if(!node) return
+        kth(node.left)
+        index++
+        if(index===k){
+            res = node.val
+        }
+        kth(node.right)
+    }
+    kth(root)
+    return res
+};
+```
+### 230. 二叉树的右视图
+#### 题目
+> 给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+#### 方法
+层序遍历，返回每层的最后一个元素
+#### 代码
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var rightSideView = function(root) {
+    if(!root) return []
+    const res = []
+    const queue = [root]
+    while(queue.length>0){
+        const levelLength = queue.length
+        for(let i=0; i<levelLength; i++){
+            const node = queue.shift()
+            if(node.left) queue.push(node.left)
+            if(node.right) queue.push(node.right)
+            if(i===levelLength-1){
+                res.push(node.val)
+            }
+        }
+    }
+    return res
+};
+```
+### 114. 二叉树展开为链表
+#### 题目
+> 给你二叉树的根结点 root ，请你将它展开为一个单链表：
+> 
+> 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+> 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+#### 方法
+1、先序遍历 + 数组
+
+2、后序遍历：
+- 左右子树交换
+- 右子树接到左子树的最右子树
+#### 代码
+```js
+/**
+ * 先序遍历 + 数组
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+var flatten = function(root) {
+    let list = []
+    let flat = function(node){
+        if(!node) return
+        list.push(node)
+        flat(node.left)
+        flat(node.right)
+    }
+    flat(root)
+    let resNode = null
+    for(let i=1; i<list.length; i++){
+        let prev = list[i-1]
+        let curr = list[i]
+        prev.left = null
+        prev.right = curr
+    }
+};
+
+/**
+ * 后序遍历
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+var flatten = function(root) {
+    if(!root) return
+    flatten(root.left)
+    flatten(root.right)
+    if(root.left){
+        let pre = root.left
+        //找到pre的最右子树
+        while(pre.right){
+            pre = pre.right
+        }
+        pre.right = root.right
+        root.right = root.left
+        root.left = null
+    }
+    root = root.right
+};
+```
+
+### 105. 从前序与中序遍历序列构造二叉树（中等）
+#### 题目
+> 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+
 #### 方法
 
 #### 代码
 ```js
 
 ```
+
 ### 
 #### 题目
-> 
+
+
 #### 方法
 
 #### 代码
 ```js
 
 ```
+
 ### 
 #### 题目
-> 
+
+
 #### 方法
 
 #### 代码
 ```js
 
 ```
+
 ### 
 #### 题目
-> 
+
+
 #### 方法
 
 #### 代码
 ```js
 
 ```
+
 ### 
 #### 题目
-> 
+
+
 #### 方法
 
 #### 代码
 ```js
 
 ```
+
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
 ## 图论（4）
 
 ## 图论（8）
 
 ## 二分查找（6）
+
+## 动态规划（10）
+### 70. 爬楼梯（简单）
+#### 题目
+> 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+> 
+> 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+#### 方法
+递推公式：f(x)=f(x−1)+f(x−2)
+#### 代码
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
+    let dp = new Array(n+1).fill(0)
+    dp[1] = 1
+    dp[2] = 2
+    for(let i=3; i<n+1; i++){
+        dp[i] = dp[i-1] + dp[i-2]
+    }
+    return dp[n]
+};
+
+//优化空间复杂度
+var climbStairs = function(n) {
+    let p = 0, q = 0, r = 1;
+    for (let i = 1; i <= n; ++i) {
+        p = q;
+        q = r;
+        r = p + q;
+    }
+    return r;
+};
+```
+
+### 198. 打家劫舍（中等）
+#### 题目
+> 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+> 
+> 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+
+#### 方法
+递推公式：f(x) = max(f(x-2)+nums[x], f(x-1))
+#### 代码
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    const n = nums.length + 1
+    const dp = new Array(n).fill(0)
+    dp[1] = nums[0]
+    dp[2] = Math.max(nums[0], nums[1])
+    for(let i=3; i<=n; i++){
+        dp[i] = Math.max(dp[i-2] + nums[i-1], dp[i-1])
+    }
+    return dp[n-1]
+};
+
+/** 优化内存
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    const n = nums.length + 1
+    const dp = new Array(n).fill(0)
+    dp[1] = nums[0]
+    dp[2] = Math.max(nums[0], nums[1])
+    let d = dp[1]
+    let p = dp[2]
+    for(let i=3; i<=n; i++){
+        dp[i] = Math.max(d + nums[i-1], p)
+        d=p
+        p=dp[i]
+    }
+    return dp[n-1]
+};
+```
