@@ -1634,11 +1634,632 @@ var flatten = function(root) {
 
 ## 图论（4）
 
-## 图论（8）
+## 回溯（8）
+### 46. 全排列
+#### 题目
+> 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+
+> 输入：nums = [1,2,3]
+> 输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+#### 方法
+回溯模版
+- 定义trackback方法
+- trackback中定义返回条件
+- trackback中for循环调用trackback
+- 引入标记位减枝
+
+#### 代码
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    var ans = []
+    var backtrack = function(arr, used){
+        if(arr.length === nums.length){
+            ans.push(arr)
+            return
+        }
+        for(let i=0; i<nums.length; i++){
+            if(!used[nums[i]]){
+                used[nums[i]] = true
+                backtrack([...arr, nums[i]], used)
+                used[nums[i]] = false
+            }
+        }
+    }
+    backtrack([], {})
+    return ans
+};
+```
+
+### 78.子集（中等）
+
+#### 题目
+> 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+> 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+> 输入：nums = [1,2,3]
+> 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+#### 方法
+
+#### 代码
+```js
+var subsets = function(nums) {
+    const ans = []
+    const trackback = function(arr, startIndex){
+        //这里不需要返回条件
+        ans.push(arr)
+        for(let i=startIndex; i<nums.length; i++){
+            trackback([...arr, nums[i]], i+1)
+        }
+    }
+    trackback([], 0)
+    return res
+}
+```
+
+### 17. 电话号码的字母组合
+#### 题目
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
+### 39. 组合总和
+#### 题目
+> 输入：candidates = [2,3,6,7], target = 7
+> 
+> 输出：[[2,2,3],[7]]
+> 
+> 解释：
+> 
+> 2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+> 7 也是一个候选， 7 = 7 。
+> 仅有这两种组合。
+
+#### 方法
+- 回溯，每次更新目标值
+- 去重, 使用statIndex
+#### 代码
+```js
+var combinationSum = function(candidates, target) {
+    const ans = []
+    const trackback = function(arr, start, tar){
+        if(tar===0){
+            ans.push(arr)
+            return
+        }
+        if(tar<0){
+            return
+        }
+        for(let i=start; i<candidates.length; i++){
+            trackback([...arr, candidates[i]], i, tar-candidates[i])
+        }
+    }
+    trackback([], 0, target)
+    return ans
+}
+```
+
+### 22. 括号生成（中等，不会）
+#### 题目
+> 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+#### 方法
+
+#### 代码
+```js
+var generateParenthesis = function(n) {
+    const ans = [];
+    // 定义回溯函数
+    const backtrack = (str, leftCount, rightCount) => {
+        // 终止条件：如果字符串长度达到 2n，则保存结果
+        if (str.length === 2 * n) {
+            ans.push(str);
+            return;
+        }
+        // 添加左括号的条件：左括号数量不能超过 n
+        if (leftCount < n) {
+            backtrack(str + '(', leftCount + 1, rightCount);
+        }
+        // 添加右括号的条件：右括号数量不能超过左括号数量
+        if (rightCount < leftCount) {
+            backtrack(str + ')', leftCount, rightCount + 1);
+        }
+    };
+    // 从空字符串开始递归
+    backtrack('', 0, 0);
+    return ans;
+};
+```
+
+### 79. 单词搜索
+#### 题目
+> 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+>
+> 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+#### 方法
+
+#### 代码
+```js
+var exist = function(board, word) {
+    const m = board.length
+    const n = board[0].length
+    //逐行初始化，注意！！！
+    const used = Array.from({ length: m }, () => new Array(n).fill(false))
+    let ans = false
+    const trackback = function(str, used, row, col){
+        if(str.length>0 && str[str.length-1]!==word[str.length-1]){
+            return
+        }
+        if(str === word){
+            ans = true
+            return 
+        }
+        if(str.length===0){
+            for(let i=0; i<m; i++){
+                for(let j=0; j<n; j++){
+                    if(!used[i][j]){
+                        used[i][j] = true
+                        trackback(str+board[i][j], used, i, j)
+                        used[i][j] = false
+                    }
+                }
+            }
+        }else{
+            //上
+            if(row-1>=0 && !used[row-1][col]){
+                used[row-1][col] = true
+                trackback(str+board[row-1][col], used, row-1, col)
+                used[row-1][col] = false
+            }
+            //下
+            if(row+1<m && !used[row+1][col]){
+                used[row+1][col] = true
+                trackback(str+board[row+1][col], used, row+1, col)
+                used[row+1][col] = false
+            }
+            //左
+            if(col-1>=0 && !used[row][col-1]){
+                used[row][col-1] = true
+                trackback(str+board[row][col-1], used, row, col-1)
+                used[row][col-1] = false
+            }
+            //右
+            if(col+1<n && !used[row][col+1]){
+                used[row][col+1] = true
+                trackback(str+board[row][col+1], used, row, col+1)
+                used[row][col+1] = false
+            }
+        }
+    }
+    trackback('', used, 0, 0)
+    return ans
+}
+```
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
 
 ## 二分查找（6）
+### 35. 搜索插入位置（简单）
+#### 题目
+> 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+> 
+> 请必须使用时间复杂度为 O(log n) 的算法。
+
+#### 方法
+
+#### 代码
+```js
+var searchInsert = function(nums, target) {
+    let left = 0;
+    let right = nums.length - 1;
+    while(left<=right){
+        let mid = Math.round((left+right)/2)
+        if(nums[mid]<target){
+            left = mid + 1
+        }else{
+            right = mid - 1
+        }
+    }
+    return left
+};
+```
+
+### 74. 搜索二维矩阵（中等）
+#### 题目
+> 给你一个满足下述两条属性的 m x n 整数矩阵：
+> 
+> 每行中的整数从左到右按非严格递增顺序排列。
+> 每行的第一个整数大于前一行的最后一个整数。
+> 给你一个整数 target ，如果 target 在矩阵中，返回 true ；否则，返回 false 。
+
+#### 方法
+
+#### 代码
+```js
+var searchMatrix = function(matrix, target) {
+    let m = matrix[0].length - 1;
+    let n = matrix.length - 1;
+    let leftX = 0, leftY = 0;
+    let rightX = m, rightY = n;
+    while(leftY<rightY){
+        let midY = Math.round((leftY + rightY)/2);
+        if(matrix[midY][0]===target){
+            return true
+        }else if(matrix[midY][0]<target){
+            leftY = midY;
+        }else{
+            rightY = midY - 1;
+        }
+    }
+    while(leftX<=rightX){
+        let midX = Math.round((leftX + rightX)/2);
+        if(matrix[leftY][midX] === target) {
+            return true
+        }else if(matrix[leftY][midX]<target){
+            leftX = midX + 1;
+        }else{
+            rightX = midX - 1;
+        }
+    }
+    return false
+};
+```
+
+### 34. 在排序数组中查找元素的第一个和最后一个位置（中等）
+#### 题目
+> 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+> 
+> 如果数组中不存在目标值 target，返回 [-1, -1]。
+> 
+> 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+
+#### 方法
+两个二分查找
+
+- 查找左边：
+- 查找右边：
+#### 代码
+```js
+var searchRange = function(nums, target) {
+    // 查找目标值的第一个位置
+    const searchLeft = () => {
+        let l = 0;
+        let r = nums.length - 1;
+        let ans = -1; // 默认返回 -1
+        while (l <= r) {
+            const m = Math.floor((l + r) / 2);
+            if (nums[m] < target) {
+                l = m + 1;
+            } else {
+                r = m - 1;
+                if (nums[m] === target) ans = m; // 更新答案
+            }
+        }
+        return ans;
+    };
+    // 查找目标值的最后一个位置
+    const searchRight = () => {
+        let l = 0;
+        let r = nums.length - 1;
+        let ans = -1; // 默认返回 -1
+        while (l <= r) {
+            const m = Math.floor((l + r) / 2);
+            if (nums[m] <= target) {
+                l = m + 1;
+                if (nums[m] === target) ans = m; // 更新答案
+            } else {
+                r = m - 1;
+            }
+        }
+        return ans;
+    };
+    // 分别调用两个函数
+    const left = searchLeft();
+    const right = searchRight();
+    return [left, right];
+};
+```
+
+### 33. 搜索旋转排序数组（中等）
+#### 题目
+> 输入：nums = [4,5,6,7,0,1,2], target = 0
+> 
+> 输出：4
+
+#### 方法
+二分查找
+
+- 其中一边是有序的
+- 以有序的一边为判断条件
+- 注意边界
+
+#### 代码
+```js
+var search = function(nums, target) {
+    let l = 0;
+    let r = nums.length - 1;
+    while(l<=r){
+        const m = Math.floor((l+r)/2)
+        if(nums[m]===target){
+            return m
+        }
+        //左边有序
+        if(nums[m]>=nums[l]){
+            if(nums[m]>target && nums[l]<=target){
+                r = m - 1
+            }else{
+                l = m + 1
+            }
+        }
+        //右边有序
+        else{
+            if(nums[m]<target && nums[r]>=target){
+                l = m + 1
+            }else{
+                r = m - 1
+            }
+        }
+    }
+    return -1
+};
+```
+
+### 153. 寻找旋转排序数组中的最小值（中等）
+#### 题目
+> 给你一个元素值 互不相同 的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+> 
+> 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
+
+
+> 输入：nums = [3,4,5,1,2]
+> 
+> 输出：1
+> 
+> 解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
+
+#### 方法
+二分查找
+
+- 如果中间值小于右边界值，则最小值在 [l, m] 范围内
+- 否则，最小值在[m + 1, r] 
+#### 代码
+```js
+var findMin = function(nums) {
+    let l = 0;
+    let r = nums.length - 1;
+    while (l < r) {
+        const m = Math.floor((l + r) / 2);
+        // 如果中间值小于右边界值，则最小值在 [l, m] 范围内
+        if (nums[m] < nums[r]) {
+            r = m; // 缩小范围到 [l, m]
+        } 
+        // 如果中间值大于右边界值，则最小值在 [m + 1, r] 范围内
+        else {
+            l = m + 1; // 缩小范围到 [m + 1, r]
+        }
+    }
+    // 循环结束后，l 和 r 相等，指向最小值
+    return nums[l];
+};
+```
+
+### 4. 寻找两个正序数组的中位数（困难，不会啊）
+#### 题目
+> 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+> 
+> 算法的时间复杂度应该为 O(log (m+n)) 。
+
+> 输入：nums1 = [1,3], nums2 = [2]
+> 输出：2.00000
+> 解释：合并数组 = [1,2,3] ，中位数 2
+
+> 输入：nums1 = [1,2], nums2 = [3,4]
+> 输出：2.50000
+> 解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+#### 方法
+
+#### 代码
+```js
+var findMedianSortedArrays = function(nums1, nums2) {
+
+}
+```
+
+## 栈（5）
+### 20. 有效的括号（简单）
+#### 题目
+> 输入：s = "()[]{}"
+> 
+> 输出：true
+#### 方法
+直接码
+#### 代码
+```js
+var isValid = function(s) {
+    const stk = []
+    var isFit = function(s1, s2){
+        return ((s1==='(' && s2===')') || (s1==='[' && s2===']') || (s1==='{' && s2==='}'))
+    }
+    for(let i=0; i<s.length; i++){
+        if(stk.length>0 && isFit(stk[stk.length-1], s[i])){
+            stk.pop()
+        }else{
+            stk.push(s[i])
+        }
+    }
+    return stk.length===0
+};
+```
+
+### 155. 最小栈（中等）
+#### 题目
+> 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+
+> 实现 MinStack 类:  
+> - MinStack() 初始化堆栈对象。  
+> - void push(int val) 将元素val推入堆栈。  
+> - void pop() 删除堆栈顶部的元素。  
+> - int top() 获取堆栈顶部的元素。  
+> - int getMin() 获取堆栈中的最小元素。  
+
+> 输入：  
+> ["MinStack","push","push","push","getMin","pop","top","getMin"]  
+> [[],[-2],[0],[-3],[],[],[],[]]  
+> 输出：  
+> [null,null,null,null,-3,null,0,-2]
+#### 方法
+- 辅助栈储存最小元素
+- 判空：throw new Error("Stack is empty");
+#### 代码
+```js
+var MinStack = function() {
+    this.stk = []; // 主栈，用于存储所有元素
+    this.min_stk = []; // 辅助栈，用于存储当前最小值
+};
+
+/** 
+ * @param {number} val
+ * @return {void}
+ */
+MinStack.prototype.push = function(val) {
+    // 将元素压入主栈
+    this.stk.push(val);
+
+    // 如果辅助栈为空，或者新元素小于等于当前最小值，则将其压入辅助栈
+    if (this.min_stk.length === 0 || val <= this.min_stk[this.min_stk.length - 1]) {
+        this.min_stk.push(val);
+    }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    // 从主栈弹出元素
+    const topVal = this.stk.pop();
+
+    // 如果弹出的元素是最小值，则也从辅助栈中弹出
+    if (topVal === this.min_stk[this.min_stk.length - 1]) {
+        this.min_stk.pop();
+    }
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    // 返回主栈的栈顶元素
+    if (this.stk.length === 0) {
+        throw new Error("Stack is empty");
+    }
+    return this.stk[this.stk.length - 1];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    // 返回辅助栈的栈顶元素，即当前最小值
+    if (this.min_stk.length === 0) {
+        throw new Error("Stack is empty");
+    }
+    return this.min_stk[this.min_stk.length - 1];
+};
+
+/** 
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(val)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+```
+
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+## 堆（3）
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
+## 贪心算法（4）
+### 
+#### 题目
+
+
+#### 方法
+
+#### 代码
+```js
+
+```
+
 
 ## 动态规划（10）
+
 ### 70. 爬楼梯（简单）
 #### 题目
 > 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
@@ -1719,3 +2340,4 @@ var rob = function(nums) {
     return dp[n-1]
 };
 ```
+
