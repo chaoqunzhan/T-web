@@ -2149,7 +2149,6 @@ var MinStack = function() {
 MinStack.prototype.push = function(val) {
     // 将元素压入主栈
     this.stk.push(val);
-
     // 如果辅助栈为空，或者新元素小于等于当前最小值，则将其压入辅助栈
     if (this.min_stk.length === 0 || val <= this.min_stk[this.min_stk.length - 1]) {
         this.min_stk.push(val);
@@ -2201,29 +2200,83 @@ MinStack.prototype.getMin = function() {
  */
 ```
 
-### 
+### 394. 字符串解码（中等）
 #### 题目
+> 给定一个经过编码的字符串，返回它解码后的字符串。
 
-
+> 输入：s = "3[a]2[bc]"
+>
+> 输出："aaabcbc"
 #### 方法
-
+- 遇到数字，更新`mutli`
+- 遇到 `[`，入栈记录`[当前倍数，之前的字符]`
+- 遇到 `]`，更新`ans`
+- 上面例子的栈`[[3, ''], [2, 'a']]`
+- 也可以用递归实现
 #### 代码
 ```js
-
+var decodeString = function(s) {
+    let ans = ''  //记录字符
+    let mutli = 0 //记录倍数
+    let i = 0
+    const stk = []
+    while(i<s.length){
+        //数字
+        if(!isNaN(s[i])){
+            mutli =  mutli * 10 + Number(s[i])
+        }
+        if(s[i]==='['){
+            stk.push([mutli, ans])
+            ans = ''
+            mutli = 0
+        }
+        if(s[i]===']'){
+            const [curr_mutli, last_ans] = stk.pop()
+            let curr_ans = ''
+            for(let j=0; j<curr_mutli; j++){
+                curr_ans += ans
+            }
+            ans = last_ans + curr_ans
+        }
+        if(s.charCodeAt(i)>='a'.charCodeAt(0) && s.charCodeAt(i)<='z'.charCodeAt(0)){
+            ans += s[i]
+        }
+        i++
+    }
+    return ans
+};
 ```
 
-### 
+### 739. 每日温度（中等）
 #### 题目
+> 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。
 
-
+> 输入: temperatures = [73,74,75,71,69,72,76,73]
+> 输出: [1,1,4,2,1,1,0,0]
 #### 方法
-
+- 新建`ans`与`temperatures`等长的数组作为输出
+- 维护一个非递增的栈，栈里存放元素下标
+- 如果元素不大于栈顶元素，就把元素下标入栈
+- 如果遇到大于栈顶的元素，就更新栈顶元素对应的`ans`值
 #### 代码
 ```js
-
+var dailyTemperatures = function(temperatures) {
+    const stk = []
+    const n = temperatures.length
+    const ans = new Array(n).fill(0)
+    for(let i=0; i<n; i++){
+        const temp = temperatures[i]
+        while(stk.length>0 && temp>temperatures[stk[stk.length-1]]){
+            const prevIndex = stk.pop()
+            ans[prevIndex] = i - prevIndex
+        }
+        stk.push(i)
+    }
+    return ans
+};
 ```
 
-### 
+### 84. 柱状图中最大的矩形（困难）
 #### 题目
 
 
@@ -2234,9 +2287,56 @@ MinStack.prototype.getMin = function() {
 
 ```
 ## 堆（3）
-### 
+### 215. 数组中第K个最大元素（中等）
 #### 题目
+> 输入: [3,2,1,5,6,4], k = 2
+> 输出: 5
 
+#### 方法
+1、快排序
+2、堆排序
+#### 代码
+```js
+//基于快速排序
+var findKthLargest = function(nums, k) {
+    var quickSelect = function (arr, k) {
+        // 随机选择一个基准值（避免最坏情况）
+        const pivotIndex = 0
+        const pivot = arr[pivotIndex]
+
+        // 分区：将大于 pivot 的元素放入 larger，小于 pivot 的元素放入 smaller
+        const larger = []
+        const smaller = []
+        const equal = []
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] > pivot) {
+                larger.push(arr[i])
+            } else if(arr[i] < pivot){
+                smaller.push(arr[i])
+            } else{
+                equal.push(arr[i])
+            }
+        }
+        // 根据 k 和分区结果决定递归方向
+        if (k <= larger.length) {
+            // 第 k 大的元素在 larger 中
+            return quickSelect(larger, k)
+        } else if (k > arr.length - smaller.length) {
+            // 第 k 大的元素在 smaller 中
+            return quickSelect(smaller, k - arr.length + smaller.length)
+        } else {
+            // 第 k 大元素在 equal 中，直接返回 pivot
+            return pivot
+        }
+    }
+    return quickSelect(nums, k)
+};
+
+//基于堆排序 TODO
+```
+### 347. 前K个高频元素（中等）
+#### 题目
+> 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
 
 #### 方法
 
@@ -2244,11 +2344,74 @@ MinStack.prototype.getMin = function() {
 ```js
 
 ```
+
+### 295. 数据流的中位数
+#### 题目
+> 中位数是有序整数列表中的中间值。如果列表的大小是偶数，则没有中间值，中位数是两个中间值的平均值。
+> 
+> 例如 arr = [2,3,4] 的中位数是 3 。
+> 例如 arr = [2,3] 的中位数是 (2 + 3) / 2 = 2.5 。
+> 实现 MedianFinder 类:
+> 
+> MedianFinder() 初始化 MedianFinder 对象。
+> 
+> void addNum(int num) 将数据流中的整数 num 添加到数据结构中。
+> 
+> double findMedian() 返回到目前为止所有元素的中位数。与实际答案相差 10-5 以内的答案将被接受。
+
 
 ## 贪心算法（4）
+### 121. 买卖股票的最佳时机（简单）
+#### 题目
+> 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+> 
+> 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+> 
+> 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+#### 方法
+
+#### 代码
+```js
+var maxProfit = function(prices) {
+    let ans = 0
+    let minPrice = Infinity
+    for(let i=0; i<prices.length; i++){
+        if(prices[i]>minPrice){
+            ans = Math.max(prices[i]-minPrice, ans)
+        }
+        minPrice = Math.min(minPrice, prices[i])
+    }
+    return ans
+};
+```
+### 55. 跳跃游戏
+#### 题目
+> 给你一个非负整数数组 nums ，你最初位于数组的 第一个下标 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
+
+> 判断你是否能够到达最后一个下标，如果可以，返回 true ；否则，返回 false 。
+#### 方法
+- 设置最大可达到位置`most`
+- 从头遍历，只有`i`在`most`范围内才可能进行下一步跳跃
+- 当`most`大于等于`n-1`的时候表示能达到
+#### 代码
+```js
+var canJump = function(nums) {
+    const n = nums.length
+    let most = 0
+    for(let i=0; i<n; i++){
+        if(i<=most){
+            most = Math.max(most, i+nums[i])
+            if(most>=n-1) return true
+        }        
+    }
+    return false
+};
+```
+
+
 ### 
 #### 题目
-
 
 #### 方法
 
@@ -2257,7 +2420,25 @@ MinStack.prototype.getMin = function() {
 
 ```
 
+### 
+#### 题目
 
+#### 方法
+
+#### 代码
+```js
+
+```
+
+### 
+#### 题目
+
+#### 方法
+
+#### 代码
+```js
+
+```
 ## 动态规划（10）
 
 ### 70. 爬楼梯（简单）
@@ -2341,3 +2522,63 @@ var rob = function(nums) {
 };
 ```
 
+
+## 排序
+### 快速排序
+#### 1、简单版本
+```js
+function quickSort(arr) {
+    // 如果数组长度小于等于 1，则直接返回（递归终止条件）
+    if (arr.length <= 1) {
+        return arr;
+    }
+    // 选择基准值（这里选择数组的第一个元素）
+    const pivot = arr[0];
+    // 分区：将小于等于基准值的元素放入 left，大于基准值的元素放入 right
+    const left = [];
+    const right = [];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] <= pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+    // 递归排序，并合并结果
+    return [...quickSort(left), pivot, ...quickSort(right)];
+}
+```
+#### 2、原地交换，减少内存版本
+```js
+function sort(arr, l, r) {
+    // 如果当前子数组长度小于等于 1，则直接返回（递归终止条件）
+    if (l >= r) {
+        return;
+    }
+    // 分区函数
+    const partition = (arr, l, r) => {
+        // 选择基准值（这里选择数组的第一个元素）
+        const pivot = arr[l];
+        let i = r + 1; // 初始化 i 为右边界外的一个位置
+        for (let j = r; j > l; j--) {
+            if (arr[j] >= pivot) {
+                i--;
+                [arr[i], arr[j]] = [arr[j], arr[i]]; // 将大于等于 pivot 的元素放到右侧
+            }
+        }
+        i--; // 将 i 移动到最终的分割点
+        [arr[l], arr[i]] = [arr[i], arr[l]]; // 将基准值放到正确的位置
+        return i; // 返回基准值的位置
+    };
+    // 获取分区点
+    const pivotIndex = partition(arr, l, r);
+    // 递归排序左右两部分
+    sort(arr, l, pivotIndex - 1);
+    sort(arr, pivotIndex + 1, r);
+}
+
+function quickSort(arr) {
+    sort(arr, 0, arr.length - 1);
+    return arr;
+}
+```
