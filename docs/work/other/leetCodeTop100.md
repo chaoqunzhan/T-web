@@ -2410,19 +2410,43 @@ var canJump = function(nums) {
 ```
 
 
-### 
+### 45. 跳跃游戏II（中等）
 #### 题目
-
+> 给定一个长度为 n 的 0 索引整数数组 nums。初始位置为 nums[0]。
+> 
+> 每个元素 nums[i] 表示从索引 i 向后跳转的最大长度。换句话说，如果你在 nums[i] 处，你可以跳转到任意 nums[i + j] 处:
+> 
+> 0 <= j <= nums[i] 
+> i + j < n
+> 返回到达 nums[n - 1] 的最小跳跃次数。生成的测试用例可以到达 nums[n - 1]。
 #### 方法
 
 #### 代码
 ```js
-
+var jump = function(nums) {
+    let most = 0
+    let steps = 0
+    let end = 0
+    for(let i=0; i<nums.length; i++){
+        if(i<=most){
+            most = Math.max(most, nums[i]+i)
+            //遇到边界就step+1
+            if(i===end){
+                end = most
+                step ++
+            }
+        }
+    }
+};
 ```
 
-### 
+### 763. 划分字母区间（中等）
 #### 题目
-
+> 给你一个字符串 s 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。例如，字符串 "ababcc" 能够被分为 ["abab", "cc"]，但类似 ["aba", "bcc"] 或 ["ab", "ab", "cc"] 的划分是非法的。
+> 
+> 注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 s 。
+> 
+> 返回一个表示每个字符串片段的长度的列表。
 #### 方法
 
 #### 代码
