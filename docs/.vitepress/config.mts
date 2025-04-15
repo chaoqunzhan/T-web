@@ -64,6 +64,7 @@ export default defineConfig({
               { text:'前端也来了解AI了', link: '/work/other/前端也来了解AI了' },
               { text:'重拾八股文', link: '/work/other/重拾八股文' },
               { text:'leetCode Top100', link: '/work/other/leetCodeTop100' },
+              { text:'network', link: '/work/other/network' },
             ]
           }
         ]
