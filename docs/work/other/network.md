@@ -1,3 +1,5 @@
+
+![图片1](./网络运营系统.png "图片1")
 ## 一、网络设备配置管理模块
 ### 模块设计与开发：
 > 主导构建统一的网络设备配置管理模块，实现设备、设备组的集中管理功能，支持设备状态和网元信息的同步。
@@ -59,19 +61,22 @@ UDP上报开源工具：NetFlow（Cisco），sFlow等
 
 **基于Ping\Traceroute技术**
 
+
+
+
+
 ## 三、网络物理与虚拟专线全链路拓扑
 
-### 全链路拓扑展示：
-> 构建从用户 VPC 到 IDC 的专线链路全景视图，覆盖 VXLAN、MPLS 和 Hybrid 专线，
+> 全链路拓扑展示：构建从用户 VPC 到 IDC 的专线链路全景视图，覆盖 VXLAN、MPLS 和 Hybrid 专线，
 帮助运维人员全面了解网络拓扑结构。
 
-### 协议与探测信息集成：
-> 整合并展示 VNI 信息、EBGP/IBGP 配置、BFD 探测数据，提供从虚拟网络到物
+> 协议与探测信息集成：整合并展示 VNI 信息、EBGP/IBGP 配置、BFD 探测数据，提供从虚拟网络到物
 理链路的全链路信息透视能力。
 
-### 稳定性与可用性优化：
-> 通过链路冗余与状态监控，提升专线链路的可靠性，为关键业务提供高可用的网
+> 稳定性与可用性优化：通过链路冗余与状态监控，提升专线链路的可靠性，为关键业务提供高可用的网
 络传输保障。
+
+### VXLAN
 
 #### 1、什么是VXLAN
 
@@ -110,24 +115,39 @@ https://support.huawei.com/enterprise/zh/doc/EDOC1100087027
 
 
 
+### MPLS
+
+#### 1、什么是MPLS
+
+多协议标签交换技术MPLS（Multiprotocol Label Switching），并不是一种业务或者应用，它实际上是一种隧道技术，在一定程度上可以保证信息传输的安全性。
+
+#### 2、MPLS L3 VPN网络的作用
+
+支持不同VPN中IP地址重叠，IDC A --> VPC A，IDC B --> VPC B在传输链路中存在IP重叠，并且流量达到转发设备时要区分哪个流量转发的目的地。MPLS L3 VPN网络中通过多个独立路由表来解决这个问题，不用的VPN在QCAR上有不同的独立路由表等配置。
+
+VRFs就是独立路由表，全称VPN Routing and Forwarding tables。
+
+- IDC->QCAR：QCAR有多个独立路由表如：VRF A、VRF B和IDC A、IDC B对应；
+- MP-BGP：把QCAR中的多个路由表传递给ES，两个不同的VPN要通过仅有的一个BGP session来传递路由。为了区分MP-BGP携带不同的RT(Route Target，相当于标记BGP属于哪个VPN)；
+- ES- NGW：静态路由传递给NGW，NGW得到不用VPN的路由信息转发相应的流量到不同的IDC；
 
 
+#### 3、MPLS专线
+
+大致流程：
+
+- 客户IDC的核心路由器通过物理专线虚出的虚拟专线接入到QCAR中；
+- QCAR通过EBGP学习相关的路由配置，分配给不同客户不同的VRF（独立路由表）；
+- ES和QCAR都通过IBGP连接路由反射器QCRR，ES学习QCAR中的路由信息，就可以区分通过MPLS过来的流量了；
+- ES 交换机和NGW采用静态路由传递路由信息，NGW就可以转发不同的流量到不同的VPC了；
+- FCR.BD连接NFVC和QCRR，起到桥梁作用；
 
 
+#### 参考：
 
+https://zhuanlan.zhihu.com/p/27539826
 
-
-
-
-
-
-
-
-
-
-
-
-
+https://support.huawei.com/enterprise/zh/doc/EDOC1100116697/953f01ce
 
 
 
