@@ -27,6 +27,9 @@ export default defineConfig({
             text: 'JavaScript', 
             collapsed: true,
               items: [
+                { text: 'JS基础手写题', link: '/work/js/JS基础手写题/index' },
+                { text: 'JS数据处理手写题', link: '/work/js/JS数据处理手写题/index' },
+                { text: 'JSDEV手写题', link: '/work/js/JSDEV手写题/index' },
                 { text: '如何学习JS框架', link: '/work/js/如何学习JS框架/index' },
                 { text: '手写Object.groupBy', link: '/work/js/手写Object.groupBy/index' },
                 { text: '手写Promise', link: '/work/js/手写Promise/index' },
