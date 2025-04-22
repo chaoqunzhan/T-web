@@ -1,9 +1,36 @@
-项目介绍:
-系统采用vue3+ts+pinia+element plus技术栈。提供一个可视化、快速搭建Web应用程序的低代码平台解决方案,支持多种数据源和API接口,主要面向非技术人员使用,通过拖搜式组件组合构建应用,无需编写代码,以节省开发时间和成本,提升应用程序的可维护性和可扩展性。
-主要工作:
-1. 负责平台的word补录模块开发,通过对Tiptap editor文本编辑器的二次封装,支持word配置化页面。
-2. 负责智能问答物料组件开发,利用flex翻转布局实现自动滚动到底,支持文档库配置,消息有用统计和错误信息配置等。
-3. 支持平台在业务功能上的落地使用,并支持业务功能的自定义开发需求。
-4. 参与平台的功能优化和bug修复等日常开发任务。
-
-
+function throttlePromises(funcs, max) {
+    if (funcs.length === 0) return Promise.resolve([]);
+  
+    return new Promise((resolve, reject) => {
+      const results = new Array(funcs.length); // 保存结果
+      let completed = 0; // 已完成任务计数
+      let nextIndex = 0; // 下一个要执行的任务索引
+  
+      // 定义工作函数
+      async function work() {
+        try {
+          while (nextIndex < funcs.length) {
+            const index = nextIndex; // 当前任务索引
+            const fn = funcs[nextIndex]; // 当前任务函数
+            nextIndex++; // 移动到下一个任务
+  
+            // 执行任务并保存结果
+            const res = await fn();
+            results[index] = res;
+  
+            completed++;
+            if (completed === funcs.length) {
+              resolve(results); // 所有任务完成，返回结果
+            }
+          }
+        } catch (error) {
+          reject(error); // 捕获错误并终止
+        }
+      }
+  
+      // 启动最多 max 个并发任务
+      for (let i = 0; i < Math.min(max, funcs.length); i++) {
+        work();
+      }
+    });
+  }

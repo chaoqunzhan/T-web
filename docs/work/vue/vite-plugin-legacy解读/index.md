@@ -180,4 +180,21 @@ vite为了不支持ESM的浏览器，在`<body>`中加载了`polyfills-legacy-f_
 
 ![image](./image1.webp)
 
-## 实现
+## 三、浏览器支持情况
+| module/nomodule | modern | 加载的资源 |
+| --- | --- | --- |
+| module | true | 原生ESM资源 |
+| module | false | 先加载原生ESM资源，再兼容ledgacy资源 |
+| nomodule | true | 兼容ledgacy资源 |
+
+对于第二种情况会出现原生和兼容资源同时加载的问题，vite在ESM资源入口中处理了，直接终止原生资源的加载
+```js
+function lu(){
+  import.meta.url,
+  import("_").catch(()=>1),
+  async function*(){}().next()
+}
+export{lu as __vite_legacy_guard};
+```
+## 参考
+[https://juejin.cn/post/7217449801633628215]

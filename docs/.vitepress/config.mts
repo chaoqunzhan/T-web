@@ -68,6 +68,7 @@ export default defineConfig({
               { text:'重拾八股文', link: '/work/other/重拾八股文' },
               { text:'leetCode Top100', link: '/work/other/leetCodeTop100' },
               { text:'network', link: '/work/other/network' },
+              { text:'随便问问', link: '/work/other/随便问问' },
             ]
           }
         ]
