@@ -113,7 +113,7 @@ vite文档关于浏览器兼容介绍了@vitejs/plugin-legacy，还说了**传�
   }
 </script>
 ```
-在type="module"中，如果执行代码出错，就会终止之后的代码执行，比如：`import.meta.url`报错了，那么它之后的代码`import('_').catch(() => 1)`将不在执行。需要注意的是：**报错只阻断了同一个module模块中的代码执行，不会影响下一个module代码执行。** 由此可见，只有以上所有的语法都不报错，是否是现代浏览器标志`__vite_is_modern_browser`才会被置成`true`。
+在type="module"中，如果执行代码出错，就会终止之后的代码执行，比如：`import.meta.url`报错了，那么它之后的代码`import('_').catch(() => 1)`将不在执行。需要注意的是：**报错只阻断了同一个module模块中的代码执行，不会影响下一个module代码执行。** 由此可见，只有以上所有的语法都不报错，是否是现代浏览器标志`__vite_is_modern_browser`才会被置成`true`。**注意：某些现代浏览器在`file:// `协议下可能无法正确加载`<script type="module">`。**
 
 3、处理“非现代浏览器”：
 ```html
@@ -196,5 +196,9 @@ function lu(){
 }
 export{lu as __vite_legacy_guard};
 ```
+
+
+
+
 ## 参考
 [https://juejin.cn/post/7217449801633628215]
