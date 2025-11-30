@@ -7,14 +7,15 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: '工作', link: '/work/browser/浏览器跨标签页通信的方式' },
-      { text: '生活', link: '/life' },
+      { text: '前端', link: '/work/browser/浏览器跨标签页通信的方式' },
+      { text: '后端', link: '/backend/redis/为什么redis那么快/index.md'},
+      // { text: '生活', link: '/life' },
       { text: '其他', link: '/other/index' }
     ],
 
     sidebar: [
       {
-        text: '工作杂谈',
+        text: '前端学习',
         items: [
           { 
             text: 'Browser', 
@@ -91,6 +92,19 @@ export default defineConfig({
               { text:'leetCode Top100', link: '/work/other/leetCodeTop100' },
               { text:'network', link: '/work/other/network' },
               { text:'随便问问', link: '/work/other/随便问问' },
+            ]
+          }
+        ]
+      },
+      {
+        text: '后端学习',
+        items: [
+          { 
+            text: 'Redis', 
+            collapsed: true,
+            items: [
+              { text: 'Redis为什么那么快？', link: '/backend/redis/为什么redis那么快/index.md' },
+              { text: 'Redis缓存击穿和缓存雪崩', link: '/backend/redis/缓存击穿和雪崩/index.md' },
             ]
           }
         ]
