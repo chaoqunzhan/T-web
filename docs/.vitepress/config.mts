@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -90,8 +91,9 @@ export default defineConfig({
               { text:'前端也来了解AI了', link: '/work/other/前端也来了解AI了' },
               { text:'重拾八股文', link: '/work/other/重拾八股文' },
               { text:'leetCode Top100', link: '/work/other/leetCodeTop100' },
-              { text:'network', link: '/work/other/network' },
-              { text:'随便问问', link: '/work/other/随便问问' },
+              // { text:'network', link: '/work/other/network' },  
+              // { text:'随便问问', link: '/work/other/随便问问' },
+              { text:'mobx miniprogram原理', link: '/work/other/mobx miniprogram原理' },
             ]
           }
         ]
@@ -116,4 +118,11 @@ export default defineConfig({
     ]
   },
   base: '/T-web/',
+  mermaid: {
+    // refer https://mermaid.js.org/config/setup/modules/mermaidAPI.html#mermaidapi-configuration-defaults for options
+  },
+  // optionally set additional config for plugin itself with MermaidPluginConfig
+  mermaidPlugin: {
+    class: "mermaid my-class", // set additional css classes for parent container 
+  },
 })
