@@ -64,3 +64,59 @@
 2. **解决了性能瓶颈**：
 * 原生开发中，新手容易犯的错误是 `this.setData({ 全量大对象 })`，导致庞大的数据在逻辑层和视图层之间进行序列化和传输，造成卡顿。
 * `mobx-miniprogram` 通过精确的依赖收集，确保了每次 `setData` 传输的数据量是**最小必要**的，从而保证了高性能。
+
+### 一个简单🌰
+```js
+// store.js 状态定义
+import { observable } from 'mobx-miniprogram';
+
+const places = observable({
+    places: [] as Place[],
+    placeDetail: null as Place | null,
+    loading: false,
+    error: null as string | null,
+    setPlaces(list: Place[]) {
+        this.places = list;
+    },
+    setPlaceDetail(id: string) {
+        const placeDetail = this.places.find((item) => item.id == id);
+        this.placeDetail = placeDetail || null;
+    },
+    setLoading(v: boolean) {
+        this.loading = v;
+    },
+    setError(msg: string | null) {
+        this.error = msg;
+    },
+    get markers(): MapMarker[] {
+        return this.places.map((item: Place) => ({
+            id: item.id,
+            label: {
+                content: item.name || item.title || '',
+                color: '#000000',
+                fontSize: 12,
+            },
+            longitude: item.coordinates && item.coordinates.longitude,
+            latitude: item.coordinates && item.coordinates.latitude,
+            width: 28,
+            height: 32,
+        }));
+    }
+});
+```
+
+```js
+// index.js 页面使用
+import { createStoreBindings } from 'mobx-miniprogram-bindings';
+import { placesStore } from '../../store/index';
+
+this.storeBindings = createStoreBindings(this, {
+    store: placesStore,
+    fields: ['places', 'markers', 'loading', 'error'],
+    actions: ['loadPlaces', 'setPlaces', 'setLoading', 'setError'],
+});
+
+if (typeof (placesStore as any).loadPlaces === 'function') {
+    (placesStore as any).loadPlaces();
+}
+```
