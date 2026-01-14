@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { withMermaid } from "vitepress-plugin-mermaid";
+// import { withMermaid } from "vitepress-plugin-mermaid";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -10,7 +10,7 @@ export default defineConfig({
     nav: [
       { text: '前端', link: '/work/browser/浏览器跨标签页通信的方式' },
       { text: '后端', link: '/backend/redis/为什么redis那么快/index.md'},
-      // { text: '生活', link: '/life' },
+      { text: 'AI', link: '/ai/n8n/docker部署.md' },
       { text: '其他', link: '/other/index' }
     ],
 
@@ -107,6 +107,18 @@ export default defineConfig({
             items: [
               { text: 'Redis为什么那么快？', link: '/backend/redis/为什么redis那么快/index.md' },
               { text: 'Redis缓存击穿和缓存雪崩', link: '/backend/redis/缓存击穿和雪崩/index.md' },
+            ]
+          }
+        ]
+      },
+      {
+        text: 'AI学习',
+        items: [
+          { 
+            text: 'n8n', 
+            collapsed: true,
+            items: [
+              { text: '本地docker部署n8n', link: '/ai/n8n/docker部署.md' },
             ]
           }
         ]
