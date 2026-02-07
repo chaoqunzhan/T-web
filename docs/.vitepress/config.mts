@@ -60,6 +60,7 @@ export default defineConfig({
               { text: 'vue3版无限滚动加载', link: '/work/vue/vue3版无限滚动加载' },
               { text: 'vite-plugin-legacy解读', link: '/work/vue/vite-plugin-legacy解读/index' },
               { text: '深入理解vite', link: '/work/vue/深入理解vite/index' },
+              { text: 'pinia的原理是啥？跟vuex的区别？vuex还有优势吗？', link: '/work/vue/pinia/index' },
             ]
           },
           { 
